@@ -2,29 +2,21 @@ const express = require("express");
 
 const app = express();
 
-let numberofRequests = 0;
+app.use(express.json())
 
-function calculateRequests(req,res,next){
-    numberofRequests++;
-    console.log(numberofRequests);
-    next()
-}
+app.post("/health-checkup",function(req,res){
+    //  kidneys = [1,2]
+    const kidneys = req.body.kidneys;
+    const kidneyLength = kidneys.length;
+    res.send("You have "+ kidneyLength+" kidneys")
+})
 
-app.get("/health-checkup",calculateRequests,function(req,res){
-    // const username = req.headers.username;
-    // const password = req.headers.password;
-    // const kidneyId = req.query.kidneyId;
-    // if(!(username == 'admin' && password=="pass")){
-    //     res.status(400).json({msg:"somethngs up with your input"});
-    //     return
-    // }
-    // if(kidneyId != 1 && kidneyId != 2){
-    //     res.status(400).json({msg:"somethngs up with your input"});
-    //     return
-    // }
-    // res.json({
-    //     msg: "your kidney is fine!"
-    // })
+// global catches using app.use()
+
+app.use(function(err, req, res,next){
+    res.json({
+        msg: "Something wrong"
+    })
 })
 
 app.listen(3000)
